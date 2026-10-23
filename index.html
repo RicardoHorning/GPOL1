@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desafio Prático: Gestão da Produção, Operações e Logística - SENAI</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+    .pastel-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    }
+    .instruction-box {
+      border-left-width: 4px;
+      border-radius: 0.75rem;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; font-size: 11pt; color: #000; }
+      .pastel-card { border: 1px solid #cbd5e1; box-shadow: none; margin-bottom: 1.2rem; page-break-inside: avoid; }
+      textarea, input[type="text"] { border: 1px solid #94a3b8 !important; background: #fff !important; color: #000 !important; }
+      .instruction-box { background-color: #f8fafc !important; border-color: #64748b !important; }
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen pb-16">
+
+  <!-- MODAL DE ADVERTÊNCIA / USO DE IA E SCREENSHOT -->
+  <div id="ai-warning-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border-2 border-amber-500 animate-fade-in text-center relative overflow-hidden">
+      <div class="absolute -top-10 -right-10 w-28 h-28 bg-amber-100 rounded-full blur-xl pointer-events-none"></div>
+      
+      <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h3 class="text-lg font-extrabold text-slate-900 mb-2">Aviso do Sistema de Aprendizagem</h3>
+      <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+        Detectamos uma tentativa de captura de tela ou alteração de janela no seu dispositivo.
+      </p>
+      
+      <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3.5 text-left text-xs text-amber-950 mb-5 space-y-2">
+        <p class="font-extrabold flex items-center gap-1.5 text-amber-800">
+          <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Notificação ao Professor:
+        </p>
+        <p class="leading-relaxed">
+          O professor receberá um alerta sobre tentativas de cópia ou geração de respostas via <strong>Inteligência Artificial (IA)</strong>.
+        </p>
+        <p class="leading-relaxed font-semibold text-slate-800 pt-1 border-t border-amber-200/60">
+          ✨ O objetivo deste desafio é exercitar a <strong>criatividade autêntica, a colaboração em grupo e o raciocínio operacional</strong> da sua equipe!
+        </p>
+      </div>
+
+      <button onclick="closeAiModal()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all active:scale-95">
+        Compreendido! Vamos Criar Nossa Solução
+      </button>
+    </div>
+  </div>
+
+  <!-- BARRA SUPERIOR FIXA -->
+  <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md no-print border-b border-slate-800">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 flex items-center justify-center font-black text-xl shadow-inner">
+          <i class="fa-solid fa-industry"></i>
+        </div>
+        <div>
+          <h1 class="text-sm font-extrabold leading-tight tracking-tight">SENAI - Afonso Pena</h1>
+          <p class="text-[11px] text-slate-300">Gestão da Produção, Operações & Logística</p>
+        </div>
+      </div>
+      <a href="https://drive.google.com/drive/folders/1ONKZaxWmUlYB6Zp4OAozb5nnzcl5p9s5?usp=sharing" target="_blank" rel="noopener noreferrer" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold px-3.5 py-2 rounded-lg flex items-center space-x-1.5 transition-all shadow-md">
+        <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
+        <span class="hidden sm:inline">Drive da Turma</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-6 space-y-6">
+
+    <!-- CABEÇALHO PRINCIPAL DA ATIVIDADE -->
+    <div class="pastel-card p-5 sm:p-6 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white border-none shadow-xl">
+      <div class="flex items-center space-x-2 text-amber-400 font-bold text-xs uppercase tracking-wider mb-2">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>Atividade Integrada Prática</span>
+      </div>
+      <h2 class="text-xl sm:text-3xl font-black tracking-tight text-white mb-2">Desafio de Soluções Operacionais</h2>
+      <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
+        Analise o estudo de caso com sua equipe, siga as orientações de cada etapa, elabore o diagnóstico e estruture o Pitch final de apresentação.
+      </p>
+    </div>
+
+    <!-- PAINEL DE PROGRESSO DA EQUIPE -->
+    <div class="pastel-card p-4 no-print border-indigo-200 bg-indigo-50/40">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-bold text-indigo-900 flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-indigo-600"></i> Progresso do Formulário
+        </span>
+        <span id="progress-percent" class="text-xs font-black text-indigo-800 bg-indigo-100 px-2.5 py-1 rounded-full border border-indigo-200">0% Concluído</span>
+      </div>
+      <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden p-0.5">
+        <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-amber-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+      </div>
+      <div class="flex justify-between items-center mt-2 text-[11px] text-slate-500">
+        <span><i class="fa-solid fa-floppy-disk text-slate-400"></i> Salvamento automático ativado</span>
+        <span id="save-status" class="font-medium text-slate-600">Aguardando preenchimento...</span>
+      </div>
+    </div>
+
+    <!-- ETAPA 1: IDENTIFICAÇÃO E ORGANIZAÇÃO DO GRUPO -->
+    <section class="pastel-card p-5 sm:p-6 border-l-4 border-l-amber-500">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-users-gear text-amber-600"></i> Etapa 1: Identificação e Organização do Grupo
+        </h3>
+        <span class="text-[10px] bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded-full uppercase">Fase 1</span>
+      </div>
+
+      <!-- ORIENTAÇÃO DO GRUPO -->
+      <div class="instruction-box bg-amber-50/80 border-amber-400 p-3.5 mb-5 text-xs text-amber-950 space-y-1.5">
+        <p class="font-bold flex items-center gap-1.5 text-amber-900">
+          <i class="fa-solid fa-compass text-amber-600"></i> Instruções do Grupo:
+        </p>
+        <p class="leading-relaxed">
+          Selecionem a equipe sorteada no menu abaixo. Verifiquem a presença de todos os integrantes de ambas as turmas (2025/2026) e escolham um nome/slogan para a equipe. Definam quem será o líder facilitador para coordenar o tempo e a fala de todos.
+        </p>
+      </div>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Selecione a sua Equipe Sorteada:</label>
+          <select id="team-select" onchange="loadTeamMembers()" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all">
+            <option value="">-- Clique para Escolher a Equipe (1 a 8) --</option>
+            <option value="1">Equipe 1 (5 Integrantes)</option>
+            <option value="2">Equipe 2 (5 Integrantes)</option>
+            <option value="3">Equipe 3 (5 Integrantes)</option>
+            <option value="4">Equipe 4 (5 Integrantes)</option>
+            <option value="5">Equipe 5 (5 Integrantes)</option>
+            <option value="6">Equipe 6 (5 Integrantes)</option>
+            <option value="7">Equipe 7 (6 Integrantes)</option>
+            <option value="8">Equipe 8 (6 Integrantes)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nome Fantasia do Grupo (Criatividade da Equipe):</label>
+          <input type="text" id="team-name" placeholder="Ex: Soluções Logísticas de Impacto, InovaPena..." oninput="saveData()" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+
+        <!-- PAINEL DE INTEGRANTES RENDERIZADO -->
+        <div id="members-container" class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+            <span class="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-address-card text-amber-600"></i> Composição Oficial da Equipe
+            </span>
+            <span class="text-[10px] bg-slate-200 text-slate-700 font-extrabold px-2 py-0.5 rounded-md">Turmas 2025 & 2026</span>
+          </div>
+          <p class="text-xs text-slate-500">Confira a lista dos membros sorteados e marque a caixa dos presentes:</p>
+          <div id="members-checkboxes" class="grid grid-cols-1 gap-2">
+            <!-- Renderizado via Javascript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESTUDO DE CASO DA EMPRESA -->
+    <section class="pastel-card p-5 sm:p-6 border-l-4 border-l-blue-500 bg-gradient-to-b from-blue-50/30 to-white">
+      <div class="flex items-center space-x-2 text-blue-900 font-extrabold text-xs uppercase tracking-wider mb-2">
+        <i class="fa-solid fa-building-circle-exclamation"></i>
+        <span>Cenário da Empresa para Análise</span>
+      </div>
+      <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mb-3">Estudo de Caso: Metalúrgica & Serviços "InduLog"</h3>
+      
+      <div class="text-xs sm:text-sm text-slate-700 space-y-3 leading-relaxed">
+        <p>
+          A <strong>InduLog</strong> é uma empresa de médio porte fabricante de equipamentos industriais e prestadora de serviços de manutenção para clientes corporativos.
+        </p>
+        <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200 text-amber-950 font-medium space-y-1">
+          <p class="font-bold flex items-center gap-1.5 text-amber-800">
+            <i class="fa-solid fa-triangle-exclamation"></i> Situação Crítica Atual:
+          </p>
+          <p class="text-xs">
+            A fábrica opera em capacidade máxima com horas extras recorrentes, porém as entregas aos clientes estão atrasadas em 40% e os custos operacionais dispararam.
+          </p>
+        </div>
+        
+        <div class="space-y-2 pt-1">
+          <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider text-blue-900">Constatações da Vistoria Técnica:</h4>
+          <ul class="list-disc pl-5 space-y-1.5 text-xs text-slate-600">
+            <li><strong>Corte & Dobra (Etapa 1):</strong> Trabalha em ritmo acelerado e produz o dobro da velocidade da montagem. O galpão está abarrotado de lotes intermediários bloqueando os corredores.</li>
+            <li><strong>Solda & Montagem (Etapa 2):</strong> Operadores perdem em média 2 horas por dia procurando peças na bagunça ou aguardando componentes atrasados.</li>
+            <li><strong>Recebimento & Almoxarifado:</strong> Os insumos comprados não são conferidos na entrada. Peças defeituosas são descobertas apenas na montagem, gerando alto nível de <strong>retrabalho</strong>.</li>
+            <li><strong>Serviço de Campo (Logística Externa):</strong> Equipes de manutenção se deslocam até os clientes sem os componentes corretos, exigindo viagens extras de emergência.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 2: DIAGNÓSTICO OPERACIONAL -->
+    <section class="pastel-card p-5 sm:p-6 border-l-4 border-l-red-500">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-magnifying-glass-chart text-red-600"></i> Etapa 2: Diagnóstico Operacional (Análise de Gargalos)
+        </h3>
+        <span class="text-[10px] bg-red-100 text-red-900 font-bold px-2 py-0.5 rounded-full uppercase">Fase 2</span>
+      </div>
+
+      <!-- ORIENTAÇÃO DO DIAGNÓSTICO -->
+      <div class="instruction-box bg-red-50/80 border-red-400 p-3.5 mb-5 text-xs text-red-950 space-y-1.5">
+        <p class="font-bold flex items-center gap-1.5 text-red-900">
+          <i class="fa-solid fa-lightbulb text-red-600"></i> Instruções de Diagnóstico:
+        </p>
+        <p class="leading-relaxed">
+          Discutam em grupo onde o fluxo de trabalho está travando. Lembrem-se da máxima: <em>"Trabalhar muito não significa produzir bem"</em>. Não procurem culpados individuais, mas sim falhas nos processos, acúmulo de filas e causas do retrabalho.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            2.1 Onde está o principal <strong>GARGALO</strong> e por que acelerar a Etapa 1 (Corte) está prejudicando o resultado final?
+          </label>
+          <textarea id="q1_1" rows="3" oninput="saveData()" placeholder="Explique a formação de estoques intermediários, desequilíbrio do fluxo e perda de ritmo..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            2.2 Quais são os prejuízos reais causados pelo <strong>RETRABALHO</strong> e pela ausência de conferência na entrada?
+          </label>
+          <textarea id="q1_2" rows="3" oninput="saveData()" placeholder="Descreva o desperdício de tempo dos montadores, atrasos e custos desnecessários..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 3: PLANO DE AÇÃO NOS TRÊS PILARES -->
+    <section class="pastel-card p-5 sm:p-6 border-l-4 border-l-emerald-500">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-sitemap text-emerald-600"></i> Etapa 3: Plano de Ação nos Três Pilares
+        </h3>
+        <span class="text-[10px] bg-emerald-100 text-emerald-900 font-bold px-2 py-0.5 rounded-full uppercase">Fase 3</span>
+      </div>
+
+      <!-- ORIENTAÇÃO DOS PILARES -->
+      <div class="instruction-box bg-emerald-50/80 border-emerald-400 p-3.5 mb-5 text-xs text-emerald-950 space-y-1.5">
+        <p class="font-bold flex items-center gap-1.5 text-emerald-900">
+          <i class="fa-solid fa-gears text-emerald-600"></i> Instruções de Ação:
+        </p>
+        <p class="leading-relaxed">
+          Proponham 1 melhoria prática e objetiva para cada um dos três pilares do sistema:
+          <strong>PRODUÇÃO</strong> = Transformação e padrão de qualidade do produto;
+          <strong>OPERAÇÕES</strong> = Ritmo, sincronia e organização do fluxo de trabalho;
+          <strong>LOGÍSTICA</strong> = Movimentação, recebimento e disponibilização de materiais.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            🟢 <strong>Pilar PRODUÇÃO:</strong> (Ação para garantir padrão e qualidade)
+          </label>
+          <input type="text" id="q2_1" oninput="saveData()" placeholder="Ex: Padronização das rotinas de inspeção e controle das montagens..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            🔵 <strong>Pilar OPERAÇÕES:</strong> (Ação para rebalancear e harmonizar o ritmo)
+          </label>
+          <input type="text" id="q2_2" oninput="saveData()" placeholder="Ex: Nivelar o ritmo do Corte com a velocidade real da Montagem..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            🟠 <strong>Pilar LOGÍSTICA:</strong> (Ação para organizar movimentação e materiais)
+          </label>
+          <input type="text" id="q2_3" oninput="saveData()" placeholder="Ex: Organização física dos lotes e demarcação dos corredores..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 4: LOGÍSTICA INTEGRADA E PROCEDIMENTOS -->
+    <section class="pastel-card p-5 sm:p-6 border-l-4 border-l-purple-500">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-boxes-packing text-purple-600"></i> Etapa 4: Logística Integrada e Procedimentos
+        </h3>
+        <span class="text-[10px] bg-purple-100 text-purple-900 font-bold px-2 py-0.5 rounded-full uppercase">Fase 4</span>
+      </div>
+
+      <!-- ORIENTAÇÃO DE CONTROLE -->
+      <div class="instruction-box bg-purple-50/80 border-purple-400 p-3.5 mb-5 text-xs text-purple-950 space-y-1.5">
+        <p class="font-bold flex items-center gap-1.5 text-purple-900">
+          <i class="fa-solid fa-clipboard-check text-purple-600"></i> Instruções de Controle:
+        </p>
+        <p class="leading-relaxed">
+          Crie procedimentos simples e práticos (como checklists, kits organizados ou sinalizações visuais) para evitar que a falha se repita no Recebimento e na equipe externa de campo.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            4.1 Procedimento Padrão para <strong>Recebimento & Conferência de Insumos</strong>:
+          </label>
+          <textarea id="q3_1" rows="2" oninput="saveData()" placeholder="Descreva como será a conferência na entrada antes da liberação para a fábrica..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            4.2 Procedimento para <strong>Abastecimento das Equipes de Serviço de Campo</strong>:
+          </label>
+          <textarea id="q3_2" rows="2" oninput="saveData()" placeholder="Descreva a montagem e conferência prévia dos kits de peças antes da saída dos técnicos..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 5: PREPARAÇÃO PARA O PITCH FINAL -->
+    <section class="pastel-card p-5 sm:p-6 border-l-4 border-l-amber-500 bg-amber-50/10">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-bullhorn text-amber-600"></i> Etapa 5: Preparação para a Apresentação Final (Pitch de 3 Minutos)
+        </h3>
+        <span class="text-[10px] bg-amber-200 text-amber-950 font-bold px-2 py-0.5 rounded-full uppercase">Fase Final</span>
+      </div>
+
+      <!-- REGRAS OBRIBATÓRIAS DA APRESENTAÇÃO -->
+      <div class="instruction-box bg-amber-100/90 border-amber-500 p-4 mb-5 text-xs text-amber-950 space-y-2.5 shadow-sm">
+        <p class="font-extrabold flex items-center gap-1.5 text-amber-900 text-sm">
+          <i class="fa-solid fa-star text-amber-600"></i> Regras Obrigatórias da Apresentação:
+        </p>
+        <ul class="space-y-2 text-slate-800 pl-1">
+          <li class="flex items-start gap-2">
+            <span class="text-amber-700 font-bold">📌</span>
+            <span><strong>Participação 100% Obrigatória:</strong> Todos os membros da equipe presentes devem apresentar ativamente uma parte da solução durante a fala final.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-amber-700 font-bold">🎨</span>
+            <span><strong>Formato Criativo:</strong> A apresentação será a última atividade do dia! Sejam altamente criativos no formato (demonstração prática, dramatização do fluxo de trabalho, recursos visuais impactantes).</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-amber-700 font-bold">🎯</span>
+            <span><strong>Foco na Solução:</strong> Expliquem claramente como a proposta resolve o gargalo e otimiza a logística e as operações da InduLog.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            🎤 <strong>Slogan / Frase de Impacto da Equipe:</strong>
+          </label>
+          <input type="text" id="q4_slogan" oninput="saveData()" placeholder="Ex: 'Sincronia na Fábrica, Agilidade na Entrega!'" class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">
+            💡 <strong>Resumo do Roteiro da Solução Inovadora da Equipe:</strong>
+          </label>
+          <textarea id="q4_pitch" rows="3" oninput="saveData()" placeholder="Resuma as principais ações que a equipe apresentará no Pitch e quem abordará cada pilar..." class="w-full p-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTÕES DE EXPORTAÇÃO E ENVIO -->
+    <div class="space-y-3 no-print pt-2">
+      <button onclick="triggerPDFPrint()" class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-black text-sm rounded-xl shadow-lg flex items-center justify-center space-x-2 transition-all active:scale-[0.99]">
+        <i class="fa-solid fa-file-pdf text-amber-400 text-lg"></i>
+        <span>GERAR PDF FORMATADO DAS RESPOSTAS</span>
+      </button>
+
+      <a href="https://drive.google.com/drive/folders/1ONKZaxWmUlYB6Zp4OAozb5nnzcl5p9s5?usp=sharing" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-xl shadow-md flex items-center justify-center space-x-2 transition-all active:scale-[0.99]">
+        <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
+        <span>ENVIAR PDF NO GOOGLE DRIVE DA TURMA</span>
+      </a>
+
+      <div class="flex justify-between items-center px-1 pt-1">
+        <span class="text-xs text-slate-400 font-medium">SENAI Afonso Pena • 2026</span>
+        <button onclick="clearForm()" class="text-xs text-red-500 hover:text-red-700 font-semibold underline">Limpar formulário</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT DE DADOS E EVENTOS -->
+  <script>
+    // DADOS DAS EQUIPES E INTEGRANTES DA TURMA
+    const teamsData = {
+      "1": [
+        "Kaue Lohran Souza Bielski (Turma 2026)",
+        "Jaqueline Oriani Fonte (Turma 2026)",
+        "Giordany Gabriella Rocha Nube (Turma 2026)",
+        "Kayo Alves Cordeiro Chrisanto (Turma 2025)",
+        "Davi Vinicius de Souza Messias (Turma 2025)"
+      ],
+      "2": [
+        "Marcos Eduardo dos Santos Fernandes (Turma 2026)",
+        "Luis Henrique de Oliveira de Lima (Turma 2026)",
+        "Gabriel Henrique das Chagas Linecia (Turma 2026)",
+        "Lorran Souza Agostinho (Turma 2025)",
+        "Régis Gabriel Oliveira dos Santos (Turma 2025)"
+      ],
+      "3": [
+        "Emily Cristina Lodi (Turma 2026)",
+        "Gustavo Fernandes Dobner (Turma 2026)",
+        "Kanydia Luis do Vale de Sousa (Turma 2026)",
+        "Nicoly de Araujo Stevi Moreira (Turma 2025)",
+        "João Luiz Sare (Turma 2025)"
+      ],
+      "4": [
+        "Raissa Gabriela Surek Cláudio (Turma 2026)",
+        "Isabella Silva de Oliveira (Turma 2026)",
+        "Larissa Machado Correa (Turma 2026)",
+        "Ana Clara da Silva Souza (Turma 2025)",
+        "Moises David Lopez Leon (Turma 2025)"
+      ],
+      "5": [
+        "Bryan Eduardo Lima do Prado (Turma 2026)",
+        "João Vitor da Cruz Farias (Turma 2026)",
+        "Sara Brandão Carneiro (Turma 2026)",
+        "Emanuelle Cristine dos Anjos Ribeiro (Turma 2025)",
+        "Emanuely dos Santos Halz (Turma 2025)"
+      ],
+      "6": [
+        "João Rafael dos Santos Scarcetto (Turma 2026)",
+        "Eduardo Henrique Santos da Silva (Turma 2026)",
+        "Vitor Souza Pinheiro (Turma 2026)",
+        "Gabrieli Cordeiro Garcia (Turma 2025)",
+        "Luan Pedro de Freitas Corrêa de Oliveira (Turma 2025)"
+      ],
+      "7": [
+        "Emilly Nathiele Vieira (Turma 2026)",
+        "Yan Felipe Silva Santos (Turma 2026)",
+        "Gabriel Sebastian Ferreira de Deus (Turma 2026)",
+        "Gabrielly Leite Santos (Turma 2026)",
+        "Anacharlene Lysvain Sain Louis Contasti (Turma 2025)",
+        "Nicolas Machado Maciel (Turma 2025)"
+      ],
+      "8": [
+        "Aghata Cristye dos Santos (Turma 2026)",
+        "Elloiza Venancio de Oliveira (Turma 2026)",
+        "Pedro Henrique Amelio (Turma 2026)",
+        "Luiza Souza da Silva (Turma 2025)",
+        "Amanda dos Santos Queiroz (Turma 2025)",
+        "Kamilly Moraes Rodrigues (Turma 2025)"
+      ]
+    };
+
+    let isInternalPrinting = false;
+
+    function loadTeamMembers() {
+      const select = document.getElementById('team-select');
+      const container = document.getElementById('members-container');
+      const list = document.getElementById('members-checkboxes');
+      const teamId = select.value;
+
+      list.innerHTML = '';
+
+      if (teamId && teamsData[teamId]) {
+        container.classList.remove('hidden');
+        teamsData[teamId].forEach((member, index) => {
+          const div = document.createElement('div');
+          div.className = 'flex items-center justify-between p-2.5 bg-white rounded-lg border border-slate-200 text-xs text-slate-800 font-semibold shadow-sm';
+          div.innerHTML = `
+            <div class="flex items-center space-x-2.5">
+              <input type="checkbox" id="m_${teamId}_${index}" onchange="saveData()" checked class="w-4 h-4 text-amber-600 rounded focus:ring-amber-500 border-slate-300">
+              <label for="m_${teamId}_${index}" class="cursor-pointer select-none">${member}</label>
+            </div>
+            <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold uppercase">Presente</span>
+          `;
+          list.appendChild(div);
+        });
+      } else {
+        container.classList.add('hidden');
+      }
+      saveData();
+    }
+
+    function updateProgress() {
+      const inputs = ['q1_1', 'q1_2', 'q2_1', 'q2_2', 'q2_3', 'q3_1', 'q3_2', 'q4_slogan', 'q4_pitch'];
+      let filled = 0;
+      inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value.trim() !== '') filled++;
+      });
+
+      const teamSelect = document.getElementById('team-select');
+      if (teamSelect && teamSelect.value !== '') filled++;
+
+      const total = inputs.length + 1;
+      const percent = Math.round((filled / total) * 100);
+
+      document.getElementById('progress-bar').style.width = percent + '%';
+      document.getElementById('progress-percent').innerText = percent + '% Concluído';
+    }
+
+    function saveData() {
+      const data = {
+        teamSelect: document.getElementById('team-select').value,
+        teamName: document.getElementById('team-name').value,
+        q1_1: document.getElementById('q1_1').value,
+        q1_2: document.getElementById('q1_2').value,
+        q2_1: document.getElementById('q2_1').value,
+        q2_2: document.getElementById('q2_2').value,
+        q2_3: document.getElementById('q2_3').value,
+        q3_1: document.getElementById('q3_1').value,
+        q3_2: document.getElementById('q3_2').value,
+        q4_slogan: document.getElementById('q4_slogan').value,
+        q4_pitch: document.getElementById('q4_pitch').value,
+        members: []
+      };
+
+      const teamId = data.teamSelect;
+      if (teamId && teamsData[teamId]) {
+        teamsData[teamId].forEach((_, index) => {
+          const cb = document.getElementById(`m_${teamId}_${index}`);
+          if (cb) data.members.push(cb.checked);
+        });
+      }
+
+      localStorage.setItem('senai_desafio_equipe', JSON.stringify(data));
+      document.getElementById('save-status').innerText = 'Salvo às ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      updateProgress();
+    }
+
+    function restoreData() {
+      const saved = localStorage.getItem('senai_desafio_equipe');
+      if (!saved) return;
+      try {
+        const data = JSON.parse(saved);
+        if (data.teamSelect) {
+          document.getElementById('team-select').value = data.teamSelect;
+          loadTeamMembers();
+          if (data.members && Array.isArray(data.members)) {
+            data.members.forEach((checked, index) => {
+              const cb = document.getElementById(`m_${data.teamSelect}_${index}`);
+              if (cb) cb.checked = checked;
+            });
+          }
+        }
+        if (data.teamName) document.getElementById('team-name').value = data.teamName;
+        ['q1_1', 'q1_2', 'q2_1', 'q2_2', 'q2_3', 'q3_1', 'q3_2', 'q4_slogan', 'q4_pitch'].forEach(id => {
+          if (data[id]) document.getElementById(id).value = data[id];
+        });
+        updateProgress();
+      } catch (e) {
+        console.error("Erro ao restaurar dados", e);
+      }
+    }
+
+    function clearForm() {
+      if (confirm("Deseja realmente limpar todas as respostas salvas da equipe?")) {
+        localStorage.removeItem('senai_desafio_equipe');
+        location.reload();
+      }
+    }
+
+    function triggerPDFPrint() {
+      isInternalPrinting = true;
+      window.print();
+      setTimeout(() => { isInternalPrinting = false; }, 2500);
+    }
+
+    // MONITORAMENTO DE ATALHOS, PRINT SCREEN E IA
+    function showAiWarning() {
+      if (isInternalPrinting) return;
+      const modal = document.getElementById('ai-warning-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeAiModal() {
+      const modal = document.getElementById('ai-warning-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'PrintScreen' || e.keyCode === 44) {
+        showAiWarning();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      // Captura atalhos de impressão/screenshot comuns
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P')) {
+        if (!isInternalPrinting) {
+          e.preventDefault();
+          showAiWarning();
+        }
+      }
+    });
+
+    // Detecta alternância de abas/aplicativos no celular ou computador
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        sessionStorage.setItem('app_switched', 'true');
+      } else if (document.visibilityState === 'visible') {
+        if (sessionStorage.getItem('app_switched') === 'true') {
+          sessionStorage.removeItem('app_switched');
+          showAiWarning();
+        }
+      }
+    });
+
+    window.onload = restoreData;
+  </script>
+</body>
+</html>
