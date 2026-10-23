@@ -140,15 +140,14 @@
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Selecione a sua Equipe Sorteada:</label>
           <select id="team-select" onchange="loadTeamMembers()" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all">
-            <option value="">-- Clique para Escolher a Equipe (1 a 8) --</option>
-            <option value="1">Equipe 1 (5 Integrantes)</option>
-            <option value="2">Equipe 2 (5 Integrantes)</option>
-            <option value="3">Equipe 3 (5 Integrantes)</option>
+            <option value="">-- Clique para Escolher a Equipe (1 a 7) --</option>
+            <option value="1">Equipe 1 (4 Integrantes)</option>
+            <option value="2">Equipe 2 (4 Integrantes)</option>
+            <option value="3">Equipe 3 (4 Integrantes)</option>
             <option value="4">Equipe 4 (5 Integrantes)</option>
-            <option value="5">Equipe 5 (5 Integrantes)</option>
-            <option value="6">Equipe 6 (5 Integrantes)</option>
-            <option value="7">Equipe 7 (6 Integrantes)</option>
-            <option value="8">Equipe 8 (6 Integrantes)</option>
+            <option value="5">Equipe 5 (4 Integrantes)</option>
+            <option value="6">Equipe 6 (4 Integrantes)</option>
+            <option value="7">Equipe 7 (4 Integrantes)</option>
           </select>
         </div>
 
@@ -333,7 +332,7 @@
         <span class="text-[10px] bg-amber-200 text-amber-950 font-bold px-2 py-0.5 rounded-full uppercase">Fase Final</span>
       </div>
 
-      <!-- REGRAS OBRIBATÓRIAS DA APRESENTAÇÃO -->
+      <!-- REGRAS OBRIGATÓRIAS DA APRESENTAÇÃO -->
       <div class="instruction-box bg-amber-100/90 border-amber-500 p-4 mb-5 text-xs text-amber-950 space-y-2.5 shadow-sm">
         <p class="font-extrabold flex items-center gap-1.5 text-amber-900 text-sm">
           <i class="fa-solid fa-star text-amber-600"></i> Regras Obrigatórias da Apresentação:
@@ -393,65 +392,50 @@
 
   <!-- JAVASCRIPT DE DADOS E EVENTOS -->
   <script>
-    // DADOS DAS EQUIPES E INTEGRANTES DA TURMA
+    // DADOS DAS EQUIPES E INTEGRANTES ATUALIZADOS DA TURMA (7 EQUIPES - 29 ALUNOS)
     const teamsData = {
       "1": [
-        "Kaue Lohran Souza Bielski (Turma 2026)",
-        "Jaqueline Oriani Fonte (Turma 2026)",
         "Giordany Gabriella Rocha Nube (Turma 2026)",
-        "Kayo Alves Cordeiro Chrisanto (Turma 2025)",
-        "Davi Vinicius de Souza Messias (Turma 2025)"
+        "Jaqueline Oriani Fonte (Turma 2026)",
+        "Isabella Silva de Oliveira (Turma 2026)",
+        "Kaue Lohran Souza Bielski (Turma 2026)"
       ],
       "2": [
-        "Marcos Eduardo dos Santos Fernandes (Turma 2026)",
-        "Luis Henrique de Oliveira de Lima (Turma 2026)",
-        "Gabriel Henrique das Chagas Linecia (Turma 2026)",
-        "Lorran Souza Agostinho (Turma 2025)",
-        "Régis Gabriel Oliveira dos Santos (Turma 2025)"
+        "Kanydia Luis do Vale de Sousa (Turma 2026)",
+        "João Luiz Sare (Turma 2025)",
+        "Nicolas Machado Maciel (Turma 2025)",
+        "Raissa Gabriela Surek Cláudio (Turma 2026)"
       ],
       "3": [
-        "Emily Cristina Lodi (Turma 2026)",
-        "Gustavo Fernandes Dobner (Turma 2026)",
-        "Kanydia Luis do Vale de Sousa (Turma 2026)",
-        "Nicoly de Araujo Stevi Moreira (Turma 2025)",
-        "João Luiz Sare (Turma 2025)"
-      ],
-      "4": [
-        "Raissa Gabriela Surek Cláudio (Turma 2026)",
-        "Isabella Silva de Oliveira (Turma 2026)",
-        "Larissa Machado Correa (Turma 2026)",
-        "Ana Clara da Silva Souza (Turma 2025)",
-        "Moises David Lopez Leon (Turma 2025)"
-      ],
-      "5": [
         "Bryan Eduardo Lima do Prado (Turma 2026)",
         "João Vitor da Cruz Farias (Turma 2026)",
         "Sara Brandão Carneiro (Turma 2026)",
-        "Emanuelle Cristine dos Anjos Ribeiro (Turma 2025)",
-        "Emanuely dos Santos Halz (Turma 2025)"
+        "Moises David Lopez Leon (Turma 2025)"
       ],
-      "6": [
-        "João Rafael dos Santos Scarcetto (Turma 2026)",
-        "Eduardo Henrique Santos da Silva (Turma 2026)",
-        "Vitor Souza Pinheiro (Turma 2026)",
-        "Gabrieli Cordeiro Garcia (Turma 2025)",
-        "Luan Pedro de Freitas Corrêa de Oliveira (Turma 2025)"
-      ],
-      "7": [
+      "4": [
         "Emilly Nathiele Vieira (Turma 2026)",
         "Yan Felipe Silva Santos (Turma 2026)",
         "Gabriel Sebastian Ferreira de Deus (Turma 2026)",
         "Gabrielly Leite Santos (Turma 2026)",
-        "Anacharlene Lysvain Sain Louis Contasti (Turma 2025)",
-        "Nicolas Machado Maciel (Turma 2025)"
+        "Anacharlene Lysvain Sain Louis Contasti (Turma 2025)"
       ],
-      "8": [
+      "5": [
+        "Gabriel Henrique das Chagas Linecia (Turma 2026)",
+        "Lorran Souza Agostinho (Turma 2025)",
+        "Régis Gabriel Oliveira dos Santos (Turma 2025)",
+        "Luis Henrique de Oliveira de Lima (Turma 2026)"
+      ],
+      "6": [
+        "João Rafael dos Santos Scarcetto (Turma 2026)",
+        "Eduardo Henrique Santos da Silva (Turma 2026)",
+        "Gabrieli Cordeiro Garcia (Turma 2025)",
+        "Luan Pedro de Freitas Corrêa de Oliveira (Turma 2025)"
+      ],
+      "7": [
         "Aghata Cristye dos Santos (Turma 2026)",
         "Elloiza Venancio de Oliveira (Turma 2026)",
-        "Pedro Henrique Amelio (Turma 2026)",
         "Luiza Souza da Silva (Turma 2025)",
-        "Amanda dos Santos Queiroz (Turma 2025)",
-        "Kamilly Moraes Rodrigues (Turma 2025)"
+        "Amanda dos Santos Queiroz (Turma 2025)"
       ]
     };
 
